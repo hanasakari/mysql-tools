@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${pkgMapper}.${interfaceName}">
+
+	<resultMap id="${resultMapId}" type="$pkgBean.$beanName">
+	#foreach($field in $fields)
+	    <result property="$field.name" column="$field.sqlName" />
+	#end
+    </resultMap>
+
+	<!-- 插入数据 -->
+	<insert id="add${beanName}" parameterType="$pkgBean.$beanName">
+		<selectKey resultType="int" order="AFTER"
+			keyProperty="$keyInBean">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		INSERT INTO $tableName (#foreach($field in $fields)
+#if(!$field.isKey)$field.sqlName#if(!$foreach.last),#end
+#end
+#end)
+		VALUES (#foreach($field in $fields)#if(!$field.isKey)#{$field.name}#if(!$foreach.last),#end#end#end)
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="update${beanName}" parameterType="$pkgBean.$beanName">
+		UPDATE $tableName
+        <set>
+#foreach($field in $fields)
+#if(!$field.isKey)
+		<if test="$field.name != null">
+			$field.sqlName=#{$field.name},
+		</if>
+#end
+#end
+        </set>
+		WHERE $keyInColoum = #{$keyInBean}
+	</update>
+
+    <!-- 搜索条件 -->
+    <sql id="selectWhere">
+        <where>
+			#foreach($field in $fields)
+				#if(!$field.isKey)
+                    <if test="$field.name != null">
+                        AND $field.sqlName=#{$field.name}
+                    </if>
+				#end
+			#end
+        </where>
+    </sql>
+
+	<!-- 数据总量 -->
+	<select id="get${beanName}Count" resultType="int" parameterType="Map">
+		SELECT count(1)
+		FROM
+		$tableName
+        <include refid="selectWhere"></include>
+	</select>
+
+	<!-- 查询列表 -->
+	<select id="get${beanName}List" resultMap="${resultMapId}" parameterType="Map">
+		SELECT
+        #foreach($field in $fields)
+$field.sqlName#if(!$foreach.last),#end
+#end
+
+        FROM $tableName
+        <include refid="selectWhere"></include>
+		LIMIT #{offset},#{limit}
+	</select>
+
+	<!-- 查询数据 -->
+	<select id="get${beanName}" resultMap="${resultMapId}" parameterType="Integer">
+		SELECT
+        #foreach($field in $fields)
+$field.sqlName#if(!$foreach.last),#end
+#end
+
+		FROM $tableName
+        WHERE $keyInColoum = #{$keyInBean}
+	</select>
+
+</mapper>

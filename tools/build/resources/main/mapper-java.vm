@@ -1,0 +1,49 @@
+package $pkgMapper;
+
+import $pkgBean.${beanName};
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * simplexwork mysql tools generate.
+ * ${tableComment}Mapper
+ * 
+ * @author
+ * @date 
+ * @tags
+ */
+ 
+public interface $interfaceName {
+
+	/**
+	 * 查询列表
+	 */
+	public List<$beanName> get${beanName}List(Map<String,Object> params);
+
+    /**
+    * 查询列表总数
+    */
+    public int get${beanName}Count(Map<String, Object> params);
+
+	/**
+	 * 查询数据
+	 */
+	public $beanName get${beanName}(int id);
+
+	/**
+	 * 添加数据
+	 */
+	public void add${beanName}($beanName $beanVarName);
+
+	/**
+	 * 更新数据
+	 */
+	public void update${beanName}($beanName $beanVarName);
+
+	/** 
+	 * 删除数据
+	 */
+	public void delete${beanName}(int id);
+	
+}

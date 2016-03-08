@@ -1,0 +1,53 @@
+package $pkgService;
+
+import $pkgBean.$beanName;
+
+import java.util.Map;
+
+/**
+* ${tableComment}服务类
+*/
+public interface $serviceName {
+
+    /**
+    * 添加${tableComment}
+    * @param ${beanNameTuoFeng} ${tableComment}(#foreach($field in $fields)#if(!$field.isNullable && !$field.isKey) ${field.name} 必须 |#end#end)
+    * @return ${tableComment}
+    */
+    public $beanName add$beanName(${beanName} ${beanNameTuoFeng});
+
+    /**
+    * 更新${tableComment}
+    * @param ${beanNameTuoFeng} ${tableComment}(#foreach($field in $fields)#if($field.isKey) ${field.name} 必须 |#end#end)
+    */
+    public  void update$beanName(${beanName} ${beanNameTuoFeng});
+
+    /**
+    * 查询${tableComment}
+    *
+    * @return ${tableComment}
+    */
+    public $beanName get$beanName(int ${keyInBean});
+
+    /**
+    * 查询${tableComment}列表
+    *
+    * @param params
+    *            查询条件
+    *            <ul>
+#foreach($field in $fields)
+#if(!$field.isKey)
+    *            <li>${field.name}:${field.comment}</li>
+#end
+#end
+    *            </ul>
+    * @return Map
+    *         <ul>
+    *         <li>count:${tableComment}数量</li>
+    *         <li>list:${tableComment}列表</li>
+    *         </ul>
+    */
+    public Map<String, Object> get${beanName}List(Map<String, Object> params);
+
+
+}

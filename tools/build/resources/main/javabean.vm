@@ -1,0 +1,22 @@
+package $pkgBean;
+
+/**
+ * simplexwork mysql tools generate.
+ * ${tableComment}
+ *
+ * @author #author#
+ * @date 
+ * @tags
+ */
+ 
+public class $className {
+	#foreach($field in $fields)
+	
+	/**
+	 * $field.comment
+	 */
+	private $field.type $field.name;
+	
+	#end
+	
+}

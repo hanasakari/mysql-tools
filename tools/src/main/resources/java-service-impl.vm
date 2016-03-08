@@ -1,0 +1,108 @@
+package $pkgServiceImpl;
+
+import $pkgBean.$beanName;
+import ${pkgMapper}.${beanName}Mapper;
+import ${pkgService}.${serviceName};
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+
+@Service
+public class ${serviceName}Impl implements ${serviceName} {
+
+    @Autowired
+    private ${beanName}Mapper ${mapperTuoFeng};
+
+    @Transactional
+    @Override
+    public ${beanName} add${beanName}(${beanName} ${beanNameTuoFeng}) {
+        if (${beanNameTuoFeng} == null) {
+            throw new NullPointerException();
+        }
+#foreach($field in $fields)
+#if(!$field.isNullable && !$field.isKey && "addTime" != ${field.name})
+        if (${beanNameTuoFeng}.get${field.nameStartBig}() == null) {
+            throw new IllegalArgumentException("Missing argument ${field.name} ");
+        }
+#end
+#end
+
+        checkArgument(${beanNameTuoFeng});
+
+        ${beanNameTuoFeng}.setAddTime(System.currentTimeMillis() / 1000);
+
+        ${mapperTuoFeng}.add${beanName}(${beanNameTuoFeng});
+
+        return ${beanNameTuoFeng};
+    }
+
+    @Override
+    public void update${beanName}(${beanName} ${beanNameTuoFeng}) {
+        if (${beanNameTuoFeng} == null) {
+        throw new NullPointerException();
+        }
+#foreach($field in $fields)
+#if($field.isKey)
+        if (${beanNameTuoFeng}.get${field.nameStartBig}() == null) {
+            throw new IllegalArgumentException("Missing argument ${field.name} ");
+        }
+#end
+#end
+
+        checkArgument(${beanNameTuoFeng});
+
+        if (${beanNameTuoFeng}.getUpdateTime() == null) {
+            ${beanNameTuoFeng}.setUpdateTime(System.currentTimeMillis() / 1000);
+        }
+
+        ${mapperTuoFeng}.update${beanName}(${beanNameTuoFeng});
+    }
+
+    @Override
+    public ${beanName} get${beanName}(int ${keyInBean}) {
+        return ${mapperTuoFeng}.get${beanName}(${keyInBean});
+    }
+
+    @Override
+    public Map<String, Object> get${beanName}List(Map<String, Object> params) {
+        Map<String, Object> result = new HashMap<>();
+
+        if (params == null) {
+            params = Collections.emptyMap();
+            params.put("offset", 0);
+            params.put("limit", 10);
+        }
+
+        if (params.get("offset") == null) {
+            throw new IllegalArgumentException("Invalid argument offset");
+        }
+
+        if (params.get("limit") == null) {
+            throw new IllegalArgumentException("Invalid argument limit");
+        }
+
+        result.put("count", ${mapperTuoFeng}.get${beanName}Count(params));
+        result.put("list", ${mapperTuoFeng}.get${beanName}List(params));
+
+        return result;
+    }
+
+    /**
+    * 验证参数合法性
+    *
+    * @param ${beanNameTuoFeng}
+    */
+    private void checkArgument(${beanName} ${beanNameTuoFeng}) {
+// TODO
+//        if (${beanNameTuoFeng}.getApprove() != null && ${beanNameTuoFeng}.getApprove() != 0 && ${beanNameTuoFeng}.getApprove() != 1) {
+//            throw new IllegalArgumentException("Invalid argument approve");
+//        }
+    }
+
+
+}
